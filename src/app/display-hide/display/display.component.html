@@ -1,0 +1,18 @@
+<h1>Display/Hide</h1>
+
+<div id="button">
+    <button (click)="showOrHide()">
+        Show/Hide
+    </button>
+</div>
+
+<div id="image" *ngIf="show; else fadeOut">
+    <img class="col-md-4 col-sm-6 animate__animated animate__fadeIn" src="https://res.cloudinary.com/practicaldev/image/fetch/s--F9ZDzmC2--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2iqw0tvg8oqkypx4uvd2.jpeg">
+</div>
+
+<ng-template #fadeOut>
+    <img class="col-md-4 col-sm-6 animate__animated animate__fadeOut" src="https://res.cloudinary.com/practicaldev/image/fetch/s--F9ZDzmC2--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2iqw0tvg8oqkypx4uvd2.jpeg">
+</ng-template>
+
+
+

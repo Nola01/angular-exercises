@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+    margin:0;
+    padding:0;
+}
+
+body{
+    color: #FA9214;
+    text-align: center;
+}
+
+nav{
+    display: inline-block;
+    margin: 20px;
+    background-color: #0075AD;
+    border-radius: 5px;
+}
+
+nav a{
+    display: inline-block;
+    padding: 18px 30px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-right: 5px;
+}
+
