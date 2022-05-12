@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DisplayHideModule } from './display-hide/display-hide.module';
 import { ComponentCommunicationModule } from './component-communication/component-communication.module';
+import { MainPageModule } from './main-page/main-page.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,7 @@ import { ComponentCommunicationModule } from './component-communication/componen
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    MainPageModule,
     DisplayHideModule,
     ComponentCommunicationModule
   ],
