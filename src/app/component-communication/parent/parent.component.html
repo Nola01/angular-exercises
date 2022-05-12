@@ -1,0 +1,12 @@
+<div id="parent">
+    <h2>PARENT</h2>
+    <p>message: {{parentMessage}}</p>
+    <button (click)="useService()">Use Service</button>
+    <button (click)="useInput()">Use Input Property</button>
+    <button (click)="useObservable()">Use Observable</button>
+    <app-child 
+        [childMessage]="childMessage"
+        (onNewMessage)="newMessage()"    
+    >
+    </app-child>
+</div>
