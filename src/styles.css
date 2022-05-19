@@ -1,44 +1,7 @@
-* {
-    font-family: 'Lobster', cursive;
-}
 
-body{
-    color: #FA9214;
-    text-align: center;
-}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-nav{
-    display: inline-block;
-    margin: 20px;
-    background-color: #0075AD;
-    border-radius: 5px;
+.spacer {
+    flex: 1 1 auto;
 }
-
-nav a{
-    display: inline-block;
-    padding: 18px 30px;
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
-    text-transform: uppercase;
-    border-right: 5px;
-}
-
-nav a:hover {
-    color: #0075AD;
-    background-color: #FA9214;
-    border-radius: 5px;
-}
-
-nav a:focus {
-    color: #0075AD;
-    background-color: #FA9214;
-    border-radius: 5px;
-}
-
-button {
-    color: #ffffff;
-    background-color: #0075AD;
-    border-radius: 5px;
-}
-

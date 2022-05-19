@@ -1,7 +1,16 @@
 <h1>Display/Hide</h1>
 
-<div id="button">
-    <button (click)="showOrHide()">
+<div 
+    id="button"
+    fxLayout="row"
+    [style.margin-bottom]="'12px'" 
+    fxLayoutAlign="center"
+    fxLayoutGap="10px"
+>
+    <button 
+        mat-flat-button color="primary"
+        (click)="showOrHide()"
+    >
         Show/Hide
     </button>
 </div>

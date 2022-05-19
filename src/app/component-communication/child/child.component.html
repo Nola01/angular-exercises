@@ -1,7 +1,12 @@
 <div id="child">
     <h2>CHILD</h2>
-    <p>message: {{childMessage}}</p>
-    <button (click)="useService()">Use Service</button>
-    <button (click)="useOutput()">Use Output Property</button>
-    <button (click)="useObservable()">Use Observable</button>
+    <p fxLayoutAlign="center">message: {{childMessage}}</p>
+    <div 
+        fxLayoutAlign="center"
+        fxLayoutGap="10px"
+    >
+        <button mat-flat-button color="accent" (click)="useService()">Use Service</button>
+        <button mat-flat-button color="accent" (click)="useOutput()">Use Output Property</button>
+        <button mat-flat-button color="accent" (click)="useObservable()">Use Observable</button>
+    </div>
 </div>

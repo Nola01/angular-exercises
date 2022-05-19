@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainPageComponent } from './main-page/main-page.component';
+
 import { AppRoutingModule } from '../app-routing.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule } from '../material/material.module';
 
-
-
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,9 @@ import { AppRoutingModule } from '../app-routing.module';
   ],
   imports: [
     CommonModule,
-    AppRoutingModule
+    FlexLayoutModule,
+    AppRoutingModule,
+    MaterialModule
   ],
   exports: [
     MainPageComponent
