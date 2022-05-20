@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ListComponent } from './list/list.component';
 
+import { MaterialModule } from '../material/material.module';
+
+import { ListComponent } from './list/list.component';
 
 
 @NgModule({
@@ -9,7 +11,8 @@ import { ListComponent } from './list/list.component';
     ListComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule
   ]
 })
 export class CrudModule { }
