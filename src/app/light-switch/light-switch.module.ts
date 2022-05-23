@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '../material/material.module';
+import { LightsComponent } from './lights/lights.component';
 
-import { ListComponent } from './list/list.component';
+
 
 
 @NgModule({
   declarations: [
-    ListComponent
+    LightsComponent
   ],
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MaterialModule
   ]
 })
-export class CrudModule { }
+export class LightSwitchModule { }

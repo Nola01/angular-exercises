@@ -1,0 +1,33 @@
+
+<div class="traffic-light">
+
+    <div class="lights">
+        <div *ngIf="isRed && isOn; else switchOff" class="red_light animate__animated animate__fadeIn"></div>
+        <div *ngIf="isYellow && isOn; else switchOff" class="yellow_light animate__animated animate__fadeIn"></div>
+        <div *ngIf="isGreen && isOn; else switchOff" class="green_light animate__animated animate__fadeIn"></div>
+    </div>
+
+    <ng-template #switchOff>
+        <div class="switch_off"></div>
+    </ng-template>
+    
+
+</div>
+
+<div class="switch">
+    <h1>Controlador</h1>
+
+    <div class="form">
+        <mat-form-field appearance="fill">
+            <mat-label>Color del semaforo</mat-label>
+            <mat-select (selectionChange)="changeColor($event)">
+              <mat-option *ngFor="let color of colors" [value]="color">
+                {{color | titlecase}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+        <input type="checkbox" id="switch" name="switch" #switchOnCheck (click)="switchOn()">
+        Encendido / Apagado
+    </div>
+</div>

@@ -1,0 +1,70 @@
+.traffic-light {
+  background-color: #3a3939;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 40px;
+  width: 100px;
+  height: 200px;
+}
+
+.lights {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.switch_off {
+  background-color: #ffffff;
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+}
+
+.red_light {
+  -webkit-box-shadow: 0px 0px 38px 11px rgba(255, 42, 17, 0.69);
+  box-shadow: 0px 0px 38px 11px rgba(255, 42, 17, 0.69);
+  background-color: #ff0000;
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+}
+
+.yellow_light {
+  -webkit-box-shadow: 0px 0px 38px 11px rgba(235, 182, 8, 0.69);
+  box-shadow: 0px 0px 38px 11px rgba(235, 182, 8, 0.69);
+  background-color: #ebb608;
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+}
+
+.green_light {
+  -webkit-box-shadow: 0px 0px 38px 11px rgba(31, 156, 6, 0.69);
+  box-shadow: 0px 0px 38px 11px rgba(31, 156, 6, 0.69);
+  background-color: #1f9c06;
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+}
+
+.switch {
+  margin: 40px;
+}
+
+.switch h1 {
+  text-decoration: underline;
+  font-size: 30px;
+}
+/*# sourceMappingURL=lights.component.css.map */
