@@ -5,16 +5,22 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '../material/material.module';
 
 import { ListComponent } from './list/list.component';
+import { FormComponent } from './form/form.component';
+import { CrudMainPageComponent } from './crud-main-page/crud-main-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
-    ListComponent
+    ListComponent,
+    FormComponent,
+    CrudMainPageComponent
   ],
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class CrudModule { }

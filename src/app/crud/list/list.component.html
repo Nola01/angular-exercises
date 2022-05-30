@@ -1,14 +1,48 @@
-<h1>Formulario de registro</h1>
 
-<div fxLayout="row" fxLayoutGap="40">
+<table class="table table-hover" *ngIf="users.length !== 0; else error">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Suscrito</th>
+            <th>País</th>
+            <th>Ciudad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody class="animate__animated animate__fadeInRight animate__fast" >
+        <tr *ngFor="let user of users; let i = index" >
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
 
-    <div fxFlex="50">
-        1
-    </div>
+            <td *ngIf="user.offer; else noOffer" class="mt-3">
+                <span class="material-icons">
+                    check_circle
+                </span>
+            </td>
+            <ng-template #noOffer>
+                <td>
+                    <span class="material-icons">
+                        cancel
+                    </span>
+                </td>
+            </ng-template>
 
-    <div fxFlex="50">
-        2
-    </div>
+            <td>{{user.country}}</td>
+            <td>{{user.city}}</td>
+            <td>
+                <span class="material-icons" style="cursor: pointer;" (click)="editUser(user)">
+                    edit
+                </span>
+                <span class="material-icons" style="cursor: pointer;" (click)="deleteUser(user)">
+                    delete
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-</div>
+<ng-template #error>
+    <!-- <img src="/src/assets/error-gif.gif" /> -->
+</ng-template>
 
