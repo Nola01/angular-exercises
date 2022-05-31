@@ -1,24 +1,14 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "María Martínez",
+      "name": "María",
       "password": "12345",
       "email": "maria@email.com",
       "offer": false,
       "region": "Europe",
       "country": "Spain",
-      "city": "Barcelona"
-    },
-    {
-      "name": "Paco González",
-      "password": "12345",
-      "email": "paco@email.com",
-      "offer": true,
-      "region": "Europe",
-      "country": "France",
-      "city": "Paris",
-      "id": 2
+      "city": "Barcelona",
+      "id": 1
     },
     {
       "name": "Mario Herrera",
@@ -46,9 +36,19 @@
       "email": "sergio@email.com",
       "offer": true,
       "region": "Europe",
-      "country": "Germany",
-      "city": "Berlin",
+      "country": "United Kingdom",
+      "city": "London",
       "id": 5
+    },
+    {
+      "name": "Imane",
+      "password": "123456",
+      "email": "imane@email.com",
+      "offer": false,
+      "region": "Americas",
+      "country": "United States",
+      "city": "Seattle",
+      "id": 6
     }
   ]
 }

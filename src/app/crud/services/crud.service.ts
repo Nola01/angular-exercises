@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
-import { User } from '../interfaces/countries.interfaces';
+import { User } from '../interfaces/users.interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class CrudService {
 
   private _baseUrl: string = 'http://localhost:3000';  
+
 
   constructor(private http: HttpClient) { }
 
@@ -25,13 +26,22 @@ export class CrudService {
 
   createUser(user: User): Observable<User> {
     const url: string = `${this._baseUrl}/users`;
-    console.log(user);
+    // console.log(user);
     
     return this.http.post<User>(url, user);
   }
 
-  
+  editUser(user: User): Observable<User> {
+    const url: string = `${this._baseUrl}/users/${user.id}`;
+    // console.log(user);
+    
+    
+    return this.http.put<User>(url, user);
+  }
 
-
-
+  deleteUser(id: number): Observable<User> {
+    const url: string = `${this._baseUrl}/users/${id}`;
+    // console.log(id);
+    return this.http.delete<User>(url);
+  }
 }

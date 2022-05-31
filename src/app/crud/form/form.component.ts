@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, tap } from 'rxjs';
+import { delay, switchMap, tap } from 'rxjs';
 
 import { CountriesService } from '../services/countries.service';
-import { ShortCountry, User } from '../interfaces/countries.interfaces';
+import { ShortCountry } from '../interfaces/countries.interfaces';
+import { User } from '../interfaces/users.interfaces';
 import { CrudService } from '../services/crud.service';
+import { ValidatorService } from '../services/validator.service';
+import { EmailValidatorService } from '../services/email-validator.service';
 
 @Component({
   selector: 'app-form',
@@ -16,47 +19,64 @@ export class FormComponent implements OnInit {
 
   myForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
-    password: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]],
     confirmPassword: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['', [Validators.required, Validators.pattern(this.validatorService.emailPattern)]],
     offer: [false, Validators.required],
     region: ['', Validators.required],
     country: ['', Validators.required],
     city: ['', Validators.required]
-  })
+  },
+  {
+    validators: [this.validatorService.equalFields('password', 'confirmPassword')]
+  });
+
+  get emailErrorMsg(): string {
+    const errors = this.myForm.get('email')?.errors;
+    if (errors!['require']) {
+      return 'El correo es obligatorio'
+    } else if (errors!['pattern']) {
+      return 'El correo no tiene un formato correcto'
+    } else if (errors!['takenEmail']) {
+      return 'El correo ya está en uso'
+    }
+
+    return '';
+  }
 
   regions: string[] = [];
   countries: ShortCountry[] = [];
-  
   userToEdit !: User;
 
+  editedUser !: User;
+  newUser !: User;
 
+  isEdit: boolean = false;
+  loading: boolean = false;
+  
   constructor(
     private fb: FormBuilder,
     private countriesService: CountriesService,
-    private crudService: CrudService
+    private validatorService: ValidatorService,
+    private emailValidator: EmailValidatorService
   ) { }
 
   ngOnInit(): void {
 
-    // this.myForm.reset({
-    //   name: 'Usuario 1',
-    //   email: 'usuario1@email.com',
-    //   username: 'usuario001',
-    //   password: '123456',
-    //   confirmPassword: '123456',
-    //   offer: false,
-    // })
+    this.myForm.get('offer')?.setValue(false);
 
     this.regions = this.countriesService.regions;
 
     this.myForm.get('region')?.valueChanges.pipe(
       tap(() => {
         this.myForm.get('country')?.reset('');
+        this.loading = true;
       }),
+      delay(1000),
       switchMap(region => this.countriesService.getCountriesByRegion(region)!)
     ). subscribe(
       countries => {
+        this.loading = false;
         this.countries = [];
 
         // each country has more than one name, but we just need the common one
@@ -77,7 +97,9 @@ export class FormComponent implements OnInit {
 
   }
 
-  
+  noValidField(field: string) {
+    return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
+  }
 
   getForm(): User {
     const name = this.myForm.get('name')?.value;
@@ -91,6 +113,7 @@ export class FormComponent implements OnInit {
   }
 
   setForm(user: User) {
+    this.userToEdit = user;
     this.myForm.get('name')?.setValue(user.name);
     this.myForm.get('password')?.setValue(user.password);
     this.myForm.get('email')?.setValue(user.email);
@@ -98,22 +121,36 @@ export class FormComponent implements OnInit {
     this.myForm.get('region')?.setValue(user.region);
     this.myForm.get('country')?.setValue(user.country);
     this.myForm.get('city')?.setValue(user.city);
+    this.isEdit = true;
+  }
+
+  reset() {
+    this.myForm.reset();
+    this.myForm.get('region')?.setValue("");
+    this.myForm.get('country')?.setValue("");
+    this.loading = false;
+    this.isEdit = false;
   }
 
   save() {
-    // delete this.myForm.value.confirmPassword;
-    // console.log(this.myForm.value);
+    if (this.isEdit) {
+      this.myForm.get('email')?.addAsyncValidators(this.emailValidator.validate)
+    }
+    this.newUser = this.getForm();
+    this.reset();
+  }
 
-    const newUser: User = this.getForm();
+  editUser() {
+    // console.log(this.myForm.invalid);
+    // console.log(this.myForm.errors);
+    
+    this.editedUser = this.getForm();
+    this.editedUser.id = this.userToEdit.id;
 
-    this.crudService.createUser(newUser).subscribe(
-      user => {
-        console.log(user);
-      }
-    );
+    this.myForm.get('email')?.clearValidators();
+  
+    this.reset();
 
-    this.myForm.reset();
-    // this.crudService.setuser(this._user);
   }
 
   sortArray(x: ShortCountry, y: ShortCountry){

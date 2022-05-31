@@ -1,14 +1,4 @@
 
-export interface User {
-    name:            string;
-    password:        string;
-    email:           string;
-    offer:           boolean;
-    region:          string;
-    country:         string;
-    city:            string;
-}
-
 export interface ShortCountry {
     name: string,
     code: string
