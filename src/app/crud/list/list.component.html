@@ -1,5 +1,5 @@
 
-<table class="table table-hover" *ngIf="users.length !== 0; else error">
+<table class="table table-hover" *ngIf="users.length !== 0; else loading">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -11,6 +11,7 @@
         </tr>
     </thead>
     <tbody class="animate__animated animate__fadeInRight animate__fast" >
+
         <tr *ngFor="let user of users; let i = index" >
             <td>{{user.name}}</td>
             <td>{{user.email}}</td>
@@ -42,7 +43,7 @@
     </tbody>
 </table>
 
-<ng-template #error>
-    <!-- <img src="/src/assets/error-gif.gif" /> -->
+<ng-template #loading>
+    <img fxFlex="100" src="assets/loading.gif" alt="Cargando..." />
 </ng-template>
 

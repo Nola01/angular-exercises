@@ -11,7 +11,7 @@
     </div>
     <app-child 
         [childMessage]="childMessage"
-        (onNewMessage)="newMessage()"    
+        (onNewMessage)="newMessage($event)"    
     >
     </app-child>
 </div>

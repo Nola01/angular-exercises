@@ -18,9 +18,6 @@ export class ParentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.observablesService.childMessage$.subscribe(message => {
-      this.parentMessage = message;
-    })
   }
 
   useService() {
@@ -32,12 +29,16 @@ export class ParentComponent implements OnInit {
     // console.log(this.message);
   }
 
-  newMessage() {    
-    this.parentMessage = 'CHILD USING OUTPUT EVENT';
+  newMessage(msg: string) {    
+    this.parentMessage = msg;
   }
 
   useObservable() {
-    this.observablesService.parentMessage$.emit('PARENT USING SUBJECT');
+    this.observablesService.parentMsg.subscribe(
+      (msg) => {
+        this.childMessage = msg;
+      }
+    )
   }
 
 }
