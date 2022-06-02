@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { delay, switchMap, tap } from 'rxjs';
+import { delay, startWith, switchMap, tap } from 'rxjs';
 
 import { CountriesService } from '../services/countries.service';
 import { ShortCountry } from '../interfaces/countries.interfaces';
@@ -18,10 +18,11 @@ import { EmailValidatorService } from '../services/email-validator.service';
 export class FormComponent implements OnInit {
 
   myForm: FormGroup = this.fb.group({
+    id: [null],
     name: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]],
     confirmPassword: ['', Validators.required],
-    email: ['', [Validators.required, Validators.pattern(this.validatorService.emailPattern)]],
+    email: ['', [Validators.required, Validators.pattern(this.validatorService.emailPattern)], [this.emailValidator]],
     offer: [false, Validators.required],
     region: ['', Validators.required],
     country: ['', Validators.required],
@@ -33,9 +34,10 @@ export class FormComponent implements OnInit {
 
   get emailErrorMsg(): string {
     const errors = this.myForm.get('email')?.errors;
+    // console.log(errors!['takenEmail']);
     if (errors!['require']) {
       return 'El correo es obligatorio'
-    } else if (errors!['pattern']) {
+    } else if (errors!['pattern']) {      
       return 'El correo no tiene un formato correcto'
     } else if (errors!['takenEmail']) {
       return 'El correo ya está en uso'
@@ -48,8 +50,10 @@ export class FormComponent implements OnInit {
   countries: ShortCountry[] = [];
   userToEdit !: User;
 
+  users: User[] = [];
   editedUser !: User;
   newUser !: User;
+  formValue !: User;
 
   isEdit: boolean = false;
   loading: boolean = false;
@@ -57,9 +61,22 @@ export class FormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private countriesService: CountriesService,
+    private crudService: CrudService,
     private validatorService: ValidatorService,
     private emailValidator: EmailValidatorService
-  ) { }
+  ) { 
+    // const id = this.myForm.get('id')
+    // id?.valueChanges.pipe(startWith(id.value)).subscribe(next => {
+    //   if (next) {
+    //     this.isEdit= true
+    //     this.myForm.get('email')?.removeAsyncValidators(this.emailValidator.validate)
+    //   } else {
+    //     this.isEdit= false
+    //     this.myForm.get('email')?.addAsyncValidators(this.emailValidator.validate)
+
+    //   }
+    // })
+  }
 
   ngOnInit(): void {
 
@@ -114,13 +131,9 @@ export class FormComponent implements OnInit {
 
   setForm(user: User) {
     this.userToEdit = user;
-    this.myForm.get('name')?.setValue(user.name);
-    this.myForm.get('password')?.setValue(user.password);
-    this.myForm.get('email')?.setValue(user.email);
-    this.myForm.get('offer')?.setValue(user.offer);
-    this.myForm.get('region')?.setValue(user.region);
-    this.myForm.get('country')?.setValue(user.country);
-    this.myForm.get('city')?.setValue(user.city);
+    this.myForm.patchValue(user)
+
+    
     this.isEdit = true;
   }
 
@@ -133,21 +146,43 @@ export class FormComponent implements OnInit {
   }
 
   save() {
-    if (this.isEdit) {
-      this.myForm.get('email')?.addAsyncValidators(this.emailValidator.validate)
-    }
-    this.newUser = this.getForm();
+    this.formValue = this.getForm();
+    this.crudService.createUser(this.formValue).subscribe(
+      (user) => {
+        this.newUser = user;
+      }
+    );
+    
     this.reset();
   }
 
   editUser() {
     // console.log(this.myForm.invalid);
     // console.log(this.myForm.errors);
+
+    
     
     this.editedUser = this.getForm();
     this.editedUser.id = this.userToEdit.id;
 
-    this.myForm.get('email')?.clearValidators();
+    
+
+    this.crudService.editUser(this.editedUser).subscribe(
+      (user) => {
+        console.log('Editado usuario con id', user.id);        
+      }
+    );
+
+
+    // this.crudService.getAllUsers().subscribe(
+    //   (users) => {
+    //     users.map((user) => {
+    //       if (this.myForm.get('email')?.value === this.editedUser.email) {
+    //         this.myForm.get('email')?.removeAsyncValidators(this.emailValidator.validate);
+    //       }
+    //     })
+    //   }
+    // );
   
     this.reset();
 
