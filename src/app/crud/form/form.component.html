@@ -1,205 +1,190 @@
 
-<h1 fx>Formulario de registro</h1>
 
-<div fxLayout="row" fxLayoutGap="40" fxLayout.xs="column">
+<form [formGroup]="myForm" (ngSubmit)="save()">
 
-    <div fxFlex="50">
-        <form [formGroup]="myForm" (ngSubmit)="save()">
+    <!-- Username -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Nombre de usuario</label>
+        <div class="col-sm-9 mt-2">
+            <input 
+                type="text"
+                class="form-control"
+                formControlName="name"
+                placeholder="Nombre de usuario">
 
-            <!-- Username -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Nombre de usuario</label>
-                <div class="col-sm-9 mt-2">
-                    <input 
-                        type="text"
-                        class="form-control"
-                        formControlName="name"
-                        placeholder="Nombre de usuario">
-        
-                </div>    
-            </div>
-        
-            <!-- Password -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Contraseña</label>
-                <div class="col-sm-9">
-                    <input
-                        type="password"
-                        class="form-control"
-                        formControlName="password"
-                        placeholder="Contraseña"
-                    >
-                    <span
-                        class="form-text text-danger"
-                        *ngIf="noValidField('password')"
-                    >
-                        La contraseña debe tener entre 6 y 16 caracteres
-                    </span>
-                </div>
-            </div>
-        
-            <!-- Confirm Password -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Confirmar contraseña</label>
-                <div class="col-sm-9">
-                    <input
-                        type="password"
-                        class="form-control"
-                        formControlName="confirmPassword"
-                        placeholder="Confirmar contraseña"
-                    >
-                    <span
-                        class="form-text text-danger"
-                        *ngIf="noValidField('confirmPassword')"
-                    >
-                        Las contraseñas deben ser iguales
-                    </span>
-                </div>
-            </div>
-        
-            <!-- Email -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Email</label>
-                <div class="col-sm-9">
-                    <input
-                        type="email"
-                        class="form-control"
-                        formControlName="email"
-                        placeholder="Email del usuario"
-                    >
-                    <span
-                        class="form-text text-danger"
-                        *ngIf="noValidField('email')"
-                    >
-                        {{emailErrorMsg}}
-                    </span>
-                </div>
-            </div>
-        
-            <!-- CheckBox -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label"></label>
-                <div class="col-sm-9">
-        
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="checkbox"
-                            formControlName="offer"
-                            id="flexCheckDefault"
-                        >
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Envíame ofertas promocionales
-                        </label>
-                    </div>
-        
-                </div>
-            </div>
-        
-            <!-- Region -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Continente</label>
-                <div class="col-sm-9 mt-2">
-                    <select 
-                        class="form-control"
-                        formControlName="region"
-                    >
-                        <option value="" disabled> -- Seleccione Continente -- </option>
-                        <option
-                            *ngFor="let region of regions" 
-                            [value]="region | titlecase"
-                        > 
-                            {{region}} 
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row" *ngIf="loading">
-                <div class="col">
-                    <img fxFlex="100" src="assets/loading.gif" alt="Cargando..." />
-                </div>
-            </div>
-        
-            <!-- Country -->
-            <div class="row mb-3" *ngIf="countries.length !== 0">
-                <label class="col-sm-3 col-form-label">País</label>
-                <div class="col-sm-9 mt-2">
-                    <select 
-                        class="form-control"
-                        formControlName="country"
-                        
-                    >
-                        <option value="" disabled> -- Seleccione País -- </option>
-                        <option
-                            *ngFor="let country of countries" 
-                            [value]="country.name"
-                        > 
-                            {{country.name}} 
-                        </option>
-                    </select>
-                </div>
-            </div>
-        
-            <!-- City -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Ciudad</label>
-                <div class="col-sm-9 mt-2">
-        
-                    <input 
-                        type="text"
-                        class="form-control"
-                        formControlName="city"
-                        placeholder="Ciudad">
-        
-                </div>    
-            </div>
-        
-            <div class="row">
-                <div class="col">
-                    <button 
-                        *ngIf="!isEdit; else edit"
-                        type="submit"
-                        class="btn btn-primary float-start"
-                        [disabled]="myForm.invalid"
-                    >
-                        Crear
-                    </button>
-                    <ng-template #edit>
-                        <button 
-                            type="button"
-                            class="btn btn-primary float-start"
-                            [disabled]="myForm.invalid"
-                            (click)="editUser()"
-                        >
-                        <!-- [disabled]="myForm.invalid" -->
-                            Editar
-                        </button>
-                    </ng-template>
-                </div>
-                <div class="col">
-                    <button 
-                        type="button"
-                        class="btn btn-primary float-end"
-                        (click)="reset()"
-                    >
-                        Limpiar
-                    </button>
-                </div>
-            </div>
-            
-        
-        </form>
+        </div>    
     </div>
 
-    <div fxFlex="50">
-        <app-list 
-            [newUser]="newUser"
-            [editedUser]="editedUser"
-            (onEditUser)="setForm($event)"
-        >
-        </app-list>
+    <!-- Password -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Contraseña</label>
+        <div class="col-sm-9">
+            <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Contraseña"
+            >
+            <span
+                class="form-text text-danger"
+                *ngIf="noValidField('password')"
+            >
+                La contraseña debe tener entre 6 y 16 caracteres
+            </span>
+        </div>
     </div>
 
-</div>
+    <!-- Confirm Password -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Confirmar contraseña</label>
+        <div class="col-sm-9">
+            <input
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                placeholder="Confirmar contraseña"
+            >
+            <span
+                class="form-text text-danger"
+                *ngIf="noValidField('confirmPassword')"
+            >
+                Las contraseñas deben ser iguales
+            </span>
+        </div>
+    </div>
+
+    <!-- Email -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+            <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="Email del usuario"
+            >
+            <span
+                class="form-text text-danger"
+                *ngIf="noValidField('email')"
+            >
+                {{emailErrorMsg}}
+            </span>
+        </div>
+    </div>
+
+    <!-- CheckBox -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9">
+
+            <div class="form-check">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox"
+                    formControlName="offer"
+                    id="flexCheckDefault"
+                >
+                <label class="form-check-label" for="flexCheckDefault">
+                    Envíame ofertas promocionales
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Region -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Continente</label>
+        <div class="col-sm-9 mt-2">
+            <select 
+                class="form-control"
+                formControlName="region"
+            >
+                <option value="" disabled> -- Seleccione Continente -- </option>
+                <option
+                    *ngFor="let region of regions" 
+                    [value]="region | titlecase"
+                > 
+                    {{region}} 
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="loading">
+        <div class="col">
+            <img fxFlex="100" src="assets/loading.gif" alt="Cargando..." />
+        </div>
+    </div>
+
+    <!-- Country -->
+    <div class="row mb-3" *ngIf="countries.length !== 0">
+        <label class="col-sm-3 col-form-label">País</label>
+        <div class="col-sm-9 mt-2">
+            <select 
+                class="form-control"
+                formControlName="country"
+                
+            >
+                <option value="" disabled> -- Seleccione País -- </option>
+                <option
+                    *ngFor="let country of countries" 
+                    [value]="country.name"
+                > 
+                    {{country.name}} 
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- City -->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Ciudad</label>
+        <div class="col-sm-9 mt-2">
+
+            <input 
+                type="text"
+                class="form-control"
+                formControlName="city"
+                placeholder="Ciudad">
+
+        </div>    
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button 
+                *ngIf="!isEdit; else edit"
+                type="submit"
+                class="btn btn-primary float-start"
+                [disabled]="myForm.invalid"
+            >
+                Crear
+            </button>
+            <ng-template #edit>
+                <button 
+                    type="button"
+                    class="btn btn-primary float-start"
+                    [disabled]="myForm.invalid"
+                    (click)="editUser()"
+                >
+                <!-- [disabled]="myForm.invalid" -->
+                    Editar
+                </button>
+            </ng-template>
+        </div>
+        <div class="col">
+            <button 
+                type="button"
+                class="btn btn-primary float-end"
+                (click)="reset()"
+            >
+                Limpiar
+            </button>
+        </div>
+    </div>
+    
+
+</form>
+
 

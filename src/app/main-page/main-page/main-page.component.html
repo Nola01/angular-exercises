@@ -35,6 +35,15 @@
             </a>
 
             <a 
+                routerLink="/lights"
+                mat-list-item
+                (click)="sidenav.toggle()"
+            >
+                <mat-icon mat-list-icon>switch_right</mat-icon>
+                <span>Light Switch</span>
+            </a>
+
+            <a 
                 routerLink="/crud"
                 mat-list-item
                 (click)="sidenav.toggle()"
@@ -44,13 +53,14 @@
             </a>
 
             <a 
-                routerLink="/lights"
+                routerLink="/graphics"
                 mat-list-item
                 (click)="sidenav.toggle()"
             >
-                <mat-icon mat-list-icon>switch_right</mat-icon>
-                <span>Light Switch</span>
+                <mat-icon mat-list-icon>show_chart</mat-icon>
+                <span>Graphics</span>
             </a>
+
         </mat-nav-list>
 
     </mat-sidenav>

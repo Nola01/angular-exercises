@@ -10,6 +10,8 @@ import { CrudService } from './crud.service';
 })
 export class EmailValidatorService implements AsyncValidator {
 
+  originalEmail!: string | null;
+
   constructor(private http: HttpClient) { }
 
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
@@ -17,14 +19,10 @@ export class EmailValidatorService implements AsyncValidator {
 
     return this.http.get<User[]>(`http://localhost:3000/users?q=${email}`).pipe(
       map(users => {
-        if (users.length === 0) {
+        if (this.originalEmail === email) {
           return null;
         } else {
-          let response: any;
-          users.map(user => {
-            user.email == email ? response = {takenEmail: true} : response = null;
-          })
-          return response;
+          return users.length === 0 ? null : {takenEmail: true};
         }
         // return (users.length === 0) ? null : {takenEmail: true}
       })

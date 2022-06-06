@@ -21,6 +21,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     FlexLayoutModule,
     MaterialModule,
     ReactiveFormsModule
-  ]
+  ],
 })
 export class CrudModule { }

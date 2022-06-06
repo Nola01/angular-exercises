@@ -65,20 +65,16 @@ export class FormComponent implements OnInit {
     private validatorService: ValidatorService,
     private emailValidator: EmailValidatorService
   ) { 
-    // const id = this.myForm.get('id')
-    // id?.valueChanges.pipe(startWith(id.value)).subscribe(next => {
-    //   if (next) {
-    //     this.isEdit= true
-    //     this.myForm.get('email')?.removeAsyncValidators(this.emailValidator.validate)
-    //   } else {
-    //     this.isEdit= false
-    //     this.myForm.get('email')?.addAsyncValidators(this.emailValidator.validate)
 
-    //   }
-    // })
   }
 
   ngOnInit(): void {
+
+    this.crudService.userObservable$.subscribe(
+      user => {
+        this.setForm(user)
+      }
+    )
 
     this.myForm.get('offer')?.setValue(false);
 
@@ -133,7 +129,7 @@ export class FormComponent implements OnInit {
     this.userToEdit = user;
     this.myForm.patchValue(user)
 
-    
+    this.emailValidator.originalEmail = user.email;
     this.isEdit = true;
   }
 
@@ -150,40 +146,26 @@ export class FormComponent implements OnInit {
     this.crudService.createUser(this.formValue).subscribe(
       (user) => {
         this.newUser = user;
+        this.crudService.setUserSubject$(user)
+        this.reset();
       }
     );
-    
-    this.reset();
   }
 
   editUser() {
-    // console.log(this.myForm.invalid);
-    // console.log(this.myForm.errors);
-
-    
     
     this.editedUser = this.getForm();
     this.editedUser.id = this.userToEdit.id;
 
-    
 
     this.crudService.editUser(this.editedUser).subscribe(
       (user) => {
-        console.log('Editado usuario con id', user.id);        
+        console.log('Editado usuario con id', user.id);  
+        this.crudService.setUserSubject$(user)
+        this.reset();
       }
     );
 
-
-    // this.crudService.getAllUsers().subscribe(
-    //   (users) => {
-    //     users.map((user) => {
-    //       if (this.myForm.get('email')?.value === this.editedUser.email) {
-    //         this.myForm.get('email')?.removeAsyncValidators(this.emailValidator.validate);
-    //       }
-    //     })
-    //   }
-    // );
-  
     this.reset();
 
   }

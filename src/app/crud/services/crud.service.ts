@@ -10,26 +10,27 @@ import { Observable, Observer, Subject, switchMap } from 'rxjs';
 export class CrudService {
 
   private _baseUrl: string = 'http://localhost:3000'; 
-
-  isEdit: boolean = false;
   
-  isEditSubscriber(observer: Observer<boolean>) {
-    observer.next(this.isEdit);
-    return {unsubscribe() {}};
-  }
+  private _user!: User;
 
-  isEditObservable$ = new Observable(this.isEditSubscriber);
-
-  
-  
   private _userSubject$: Subject<User> = new Subject();
   public userObservable$ = this._userSubject$.asObservable();
 
-  set userSubject$ (user: User) {
-    this._userSubject$.next(user);
+
+  getUser () {
+    return {...this._user};
   }
 
+  setUser (user: User) {
+    this._user = user;
+  }
+
+  setUserSubject$ (user: User) {
+    this._userSubject$.next(user);
+  }
+  
   constructor(private http: HttpClient) { }
+
 
   getAllUsers(): Observable<User[]> {
     const url: string = `${this._baseUrl}/users`;
@@ -56,8 +57,7 @@ export class CrudService {
   editUser(user: User): Observable<User> {
     const url: string = `${this._baseUrl}/users/${user.id}`;
     // console.log(user);
-    
-    
+
     return this.http.put<User>(url, user);
   }
 
@@ -66,30 +66,4 @@ export class CrudService {
     // console.log(id);
     return this.http.delete<User>(url);
   }
-
-  // validateIsEdit(users: User[], email: string): Observable<boolean> {
-
-  //   this.getUserByEmail(email).subscribe(
-  //     user => {
-  //       this.editingUser = user
-  //     }
-  //   )
-    
-  //   users.map(
-  //     user => {
-  //       this.getUserById(user.id!).subscribe(
-  //         user => {
-  //           console.log(user.email);
-  //           console.log(email);
-            
-  //           if (user.email === email) {
-  //             this.isEdit = true;
-  //           }
-  //         }
-  //       )
-  //     }
-  //   )
-
-  //   return this.isEditObservable$;
-  // }
 }

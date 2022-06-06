@@ -49,26 +49,6 @@
       "country": "United States",
       "city": "Seattle",
       "id": 6
-    },
-    {
-      "name": "nuevo",
-      "password": "123456",
-      "email": "nuevo@email.com",
-      "offer": false,
-      "region": "Europe",
-      "country": "Sweden",
-      "city": "Stocolm",
-      "id": 7
-    },
-    {
-      "name": "otro",
-      "password": "123456",
-      "email": "jua@email.com",
-      "offer": true,
-      "region": "Asia",
-      "country": "Bhutan",
-      "city": "a",
-      "id": 8
     }
   ]
 }
