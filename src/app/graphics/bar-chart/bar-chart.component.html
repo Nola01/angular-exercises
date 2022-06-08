@@ -1,1 +1,30 @@
-<p>bar-chart works!</p>
+
+<div class="row">
+    <div class="col">
+
+        <div>
+            <div>
+                <div style="display: block">
+                    <button mat-raised-button color="primary" (click)="getConfirmedPerDayByCountry('Europe')">Europa</button>
+                    <canvas 
+                        baseChart
+                        [data]="barChartData"
+                        [options]="barChartOptions"
+                        [type]="barChartType"
+                        (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)">
+                    </canvas>
+                </div>
+
+                <button 
+                    class="btn btn-primary float-end"
+                    (click)="randomize()"
+                >
+                    Actualizar
+                </button>
+                
+            </div>
+        </div>
+
+    </div>
+</div>

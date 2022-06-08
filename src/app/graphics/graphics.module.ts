@@ -7,6 +7,7 @@ import { GraphicsRoutingModule } from './graphics-routing.module';
 import { GraphMainPageComponent } from './graph-main-page/graph-main-page.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { MaterialModule } from '../material/material.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
   imports: [
     CommonModule,
     GraphicsRoutingModule,
+    MaterialModule,
     NgChartsModule
   ]
 })

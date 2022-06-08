@@ -160,7 +160,7 @@ export class FormComponent implements OnInit {
 
     this.crudService.editUser(this.editedUser).subscribe(
       (user) => {
-        console.log('Editado usuario con id', user.id);  
+        // console.log('Editado usuario con id', user.id);  
         this.crudService.setUserSubject$(user)
         this.reset();
       }

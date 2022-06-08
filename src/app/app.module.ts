@@ -12,6 +12,7 @@ import { DisplayHideModule } from './display-hide/display-hide.module';
 import { HttpClientModule } from "@angular/common/http";
 import { LightSwitchModule } from './light-switch/light-switch.module';
 import { MainPageModule } from './main-page/main-page.module';
+import { GraphicsModule } from './graphics/graphics.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MainPageModule } from './main-page/main-page.module';
     ComponentCommunicationModule,
     CrudModule,
     DisplayHideModule,
+    GraphicsModule,
     HttpClientModule,
     LightSwitchModule,
     MainPageModule,

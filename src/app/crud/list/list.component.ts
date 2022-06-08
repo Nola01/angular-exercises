@@ -1,9 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { User } from '../interfaces/users.interfaces';
 import { CrudService } from '../services/crud.service';
 import { EmailValidatorService } from '../services/email-validator.service';
-import { FormComponent } from '../form/form.component';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-list',
@@ -15,16 +13,12 @@ export class ListComponent implements OnInit{
 
   users: User[] = [];
 
-  user!: User;
+  newUser!: User; 
 
   editedUser!: User; 
 
   isEdit: boolean = false;
 
-  @Input() newUser!: User; 
-
-
-  @Output() onEditUser: EventEmitter<User> = new EventEmitter();
 
   constructor(
     private crudService: CrudService,
@@ -66,10 +60,6 @@ export class ListComponent implements OnInit{
     )
 
     this.updateUser();
-  }
-
-  sendSelectedUser(user:User) {
-    this.onEditUser.emit(user);
   }
 
   updateUser() {
