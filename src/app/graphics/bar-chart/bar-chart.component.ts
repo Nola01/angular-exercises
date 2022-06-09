@@ -3,11 +3,14 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subject, Observable, switchMap, tap } from 'rxjs';
 
+import { DialogData } from '../interfaces/dialog.interfaces';
 
 import { GraphicsService } from '../services/graphics.service';
 import { ShortCountry } from '../interfaces/countries.interfaces';
-import { CountriesService } from '../services/countries.service';
-import { Dates, DateInfo, Total, CountryData } from '../interfaces/covid-data.interfaces';
+import { Result, RegionPokemon, MainGeneration } from '../interfaces/pokemon.interfaces';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogChartPokemonComponent } from '../dialog-chart-pokemon/dialog-chart-pokemon.component';
+
 
 @Component({
   selector: 'app-bar-chart',
@@ -19,22 +22,27 @@ export class BarChartComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
+  regions: string[] = []
+  regionsInfoUrls: string[] = []
+  pokedexUrls: string[] = []
 
-  private _infoSubject$: Subject<Total[]> = new Subject();
-  public infoObservable$ = this._infoSubject$.asObservable();
+  kantoPokemonList: string[] = []
+  johtoPokemonList: string[] = []
+  hoennPokemonList: string[] = []
+  sinnohPokemonList: string[] = []
+  unovaPokemonList: string[] = []
+  kalosPokemonList: string[] = []
+  alolaPokemonList: string[] = []
+  galarPokemonList: string[] = []
 
-  setInfoSubject$ (info: Total[]) {
-    this._infoSubject$.next(info);
-  }
-
-  public countries: ShortCountry[] = [];
-
-  public countriesInfo: [] = [];
-
-  public labels: string[] = [];
-
-  public data: number[] = [];
-
+  kantoLocationsList: MainGeneration[] = []
+  johtoLocationsList: MainGeneration[] = []
+  hoennLocationsList: MainGeneration[] = []
+  sinnohLocationsList: MainGeneration[] = []
+  unovaLocationsList: MainGeneration[] = []
+  kalosLocationsList: MainGeneration[] = []
+  alolaLocationsList: MainGeneration[] = []
+  galarLocationsList: MainGeneration[] = []
 
 
   public barChartOptions: ChartConfiguration['options'] = {
@@ -44,201 +52,234 @@ export class BarChartComponent implements OnInit {
   
 
   public barChartData: ChartData<'bar'> = {
-    labels: this.labels,
+    labels: this.regions,
     datasets: [
-      { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Casos confirmados últimas 24h', backgroundColor: '#FAC287', hoverBackgroundColor: '#50B1E6', borderWidth: 1, borderColor: '#E04A81' }
+      { 
+        data: [ ], 
+        label: 'Número de pokemons por región', backgroundColor: '#FAC287', hoverBackgroundColor: '#FAE7BD', borderWidth: 1, borderColor: '#000000', hoverBorderColor: '#000000' 
+      },
+      { 
+        data: [ ], 
+        label: 'Localizaciones por región', backgroundColor: '#4DB8E3', hoverBackgroundColor: '#B2D5FA', borderWidth: 1, borderColor: '#000000', hoverBorderColor: '#000000'
+      }
     ]
   };
 
   // events
   public chartClicked({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
-    console.log(event, active);
+    this.openDialog()
   }
 
   public chartHovered({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
-    console.log(event, active);
+    // console.log(event, active);
   }
 
-  constructor(private graphicsService: GraphicsService, private countriesService: CountriesService) { }
+  constructor(private graphicsService: GraphicsService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    // this.graphicsService.getInfoByCountry('canada', '2022-06-01');
-
-    // this.countriesService.getCountriesByRegion('Europe');
-
-    this.countriesService.getCountriesByRegion('Europe').subscribe(
-        list => {
-          list.map(country => {
-            const shortCountry: ShortCountry = {name: '', code: ''};
-            shortCountry.name = country.name.common;
-            shortCountry.code = country.cca3;
-            this.countries.push(shortCountry);
-            this.labels.push(shortCountry.name)
-          });
-          this.countries.sort(this.sortArray)
-          this.labels.sort()
-            
-        }
-    )
     
-
-    this.graphicsService.getCountriesInfo(this.labels, '2022-06-01').subscribe(
-      infoList => {
-        console.log(infoList);
+    this.graphicsService.getRegions().pipe(
+      switchMap(data => {
+        // console.log(data);
+        const results: Result[] = data.results;
+        results.map(region => {
+          this.regions.push(region.name.toUpperCase())
+          this.regionsInfoUrls.push(region.url)
+        })
         
-        infoList.map(info => {
-            this.data.push(info.today_confirmed);
+        return this.graphicsService.getRegionsInfo(this.regionsInfoUrls)
+      }),
+      switchMap(regionInfo => {
+        switch (regionInfo.name) {
+          case 'kanto':
+            this.kantoLocationsList = regionInfo.locations
+            break;
+          case 'johto':
+            this.johtoLocationsList = regionInfo.locations
+            break;
+          case 'hoenn':
+            this.hoennLocationsList = regionInfo.locations
+            break;
+          case 'sinnoh':
+            this.sinnohLocationsList = regionInfo.locations
+            break;
+          case 'unova':
+            this.unovaLocationsList = regionInfo.locations
+            break;
+          case 'kalos':
+            this.kalosLocationsList = regionInfo.locations
+            break;
+          case 'alola':
+            this.alolaLocationsList = regionInfo.locations
+            break;
+          case 'galar':
+            this.galarLocationsList = regionInfo.locations
+            break;
+          default:
+            break;
+        }
+        return this.graphicsService.getPokedexInfo(regionInfo.pokedexes[0].url)
+      })
+    )
+    .subscribe(
+      pokedexInfo => {
+        // this.regions.map(region => {
+        //   if (pokemon.region === region) {
+        //     this.pokemonList.push(pokemon.pokemon_list[pokemon.pokemon_list.length - 1])
+        //   }
+            
+        // })
+
+        console.log(pokedexInfo);
+
+        const pokemon: RegionPokemon = {region: '', pokemon_list: ['']}
+        const pokemonList = pokedexInfo.pokemon_entries;
+        pokemon.pokemon_list.splice(1,1);
+        pokemonList.map(pokemonInfo => {
+          pokemon.region = pokedexInfo.name
+          pokemon.pokemon_list.push(pokemonInfo.pokemon_species.name)
+        })
+        pokemon.pokemon_list.sort(this.sortArray);
+
+        console.log(pokemon);
+      
+        switch (pokemon.region) {
+          case 'kanto':
+            this.kantoPokemonList = pokemon.pokemon_list
+            break;
+          case 'johto':
+            this.johtoPokemonList = pokemon.pokemon_list
+            break;
+          case 'hoenn':
+            this.hoennPokemonList = pokemon.pokemon_list
+            break;
+          case 'sinnoh':
+            this.sinnohPokemonList = pokemon.pokemon_list
+            break;
+          case 'unova':
+            this.unovaPokemonList = pokemon.pokemon_list
+            break;
+          case 'kalos':
+            this.kalosPokemonList = pokemon.pokemon_list
+            break;
+          case 'alola':
+            this.alolaPokemonList = pokemon.pokemon_list
+            break;
+          case 'galar':
+            this.galarPokemonList = pokemon.pokemon_list
+            break;
+          default:
+            break;
+        }
+
+        if (pokemon.region === 'kanto') {
+          pokemon.pokemon_list.map(pokemon => {
+            this.kantoPokemonList.push(pokemon)
           })
-          
+        }
+        if (pokemon.region === 'original-johto') {
+          pokemon.pokemon_list.map(pokemon => {
+            this.johtoPokemonList.push(pokemon)
+          })
+        }
+        if (pokemon.region === 'hoenn') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.hoennPokemonList.push(pokemonName)
+          })
+        }
+        if (pokemon.region === 'original-sinnoh') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.sinnohPokemonList.push(pokemonName)
+          })
+        }
+        if (pokemon.region === 'original-unova') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.unovaPokemonList.push(pokemonName)
+          })
+        }
+        if (pokemon.region === 'kalos-central') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.kalosPokemonList.push(pokemonName)
+          })
+        }
+        if (pokemon.region === 'original-alola') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.alolaPokemonList.push(pokemonName)
+          })
+        }
+        if (pokemon.region === 'galar') {
+          pokemon.pokemon_list.map(pokemonName => {
+            this.galarPokemonList.push(pokemonName)
+          })
+        }
+        
+        this.setValues()
+
+        // console.log('pokedex kanto', this.kantoPokemonList);
+        // console.log('pokedex johto', this.johtoPokemonList);
+        // console.log('pokedex hoenn', this.hoennPokemonList);
+        // console.log('pokedex sinnoh', this.sinnohPokemonList);
+        // console.log('pokedex unova', this.unovaPokemonList);
+        // console.log('pokedex kalos', this.kalosPokemonList);
+        // console.log('pokedex alola', this.alolaPokemonList);
+        // console.log('pokedex galar', this.galarPokemonList);
+
+
       }
     )
-
-    console.log('paises', this.countries);
-
-    console.log('nombres',  this.labels);
-
-
-    // console.log('confirmed', this.data);
-
-    // this.getConfirmedPerDayByCountry(this.labels).subscribe(
-    //   infoList => {
-    //     infoList.map(info => {
-    //       this.data.push(info.today_confirmed);
-    //     })
-    //     console.log('confirmed', this.data);
-    //   }
-    // );
+    
+    // console.log(this.regions);
+    // console.log(this.regionsInfoUrls);
 
     
-    
-    
-    
-    
+
   }
 
-  getConfirmedPerDayByCountry(region: string): void { //void
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogChartPokemonComponent, {
+      data: {region: this.regions[0]},
+    });
 
-    // countries.map(country => {
-    //   this.graphicsService.getInfoByCountry(country, '2022-06-01').subscribe(
-    //     info => {
-    //       console.log('info', info);
-          
-    //     }
-    //   );
-    //   // this.data.push(info[0].today_confirmed);
-    // })
-
-    // const countries: string[] = [];
-
-    // this.countriesService.getCountriesByRegion(region).subscribe(
-    //   list => {
-    //     list.map(country => {
-    //       const shortCountry: ShortCountry = {name: '', code: ''};
-    //       shortCountry.name = country.name.common;
-    //       shortCountry.code = country.cca3;
-    //       countries.push(shortCountry.name);
-    //     });
-    //     this.countries.sort(this.sortArray)
-          
-    //   }
-    // )
-
-    // console.log(countries);
-    
-
-    this.labels.map(country => {
-      this.graphicsService.getInfoByCountry(country, '2022-06-01').subscribe(
-        data => {
-          const dates: CountryData[] = Object.values(data)
-          // console.log(dates[0]);
-          
-          const dateInfo: DateInfo[] = Object.values(dates[0])
-          // console.log(dateInfo[0]);
-
-          const country: DateInfo = dateInfo[0]
-          // console.log(country.countries);
-          
-          const countryInfoList: Total[] = Object.values(country.countries)
-          console.log(countryInfoList[0]);
-
-          // const countryInfo = countryInfoList[0]
-          
-          // const todayConfirmed = countryInfo.today_confirmed;
-
-          const countryInfo = countryInfoList[0].today_confirmed;
-
-          console.log(countryInfo);
-          
-
-          // return countryInfo
-        }
-      )
-      // const info: number = this.graphicsService.getInfoByCountry(country, '2022-06-01')
-      // this.data.push(info)
-    })
-
-    // console.log(this.data);
-    
-    
-    // const totalInfo: Total[] = []
-    
-    // countries.map(name => {
-    //   this.graphicsService.getInfoByCountry(name, '2022-06-01').subscribe(
-    //     data => {         
-
-    //       const dates: CountryData[] = Object.values(data)
-    //       // console.log(dates[0]);
-          
-    //       const dateInfo: DateInfo[] = Object.values(dates[0])
-    //       // console.log(dateInfo[0]);
-
-    //       const country: DateInfo = dateInfo[0]
-    //       // console.log(country.countries);
-          
-    //       const countryInfoList: Total[] = Object.values(country.countries)
-    //       // console.log(countryInfoList[0]);
-
-    //       const countryInfo = countryInfoList[0]
-          
-    //       // const todayConfirmed = countryInfo.today_confirmed;
-
-    //       totalInfo.push(countryInfo)
-
-
-          
-          
-    //     }
-    //   )
-    // })
-
-    // this.setInfoSubject$(totalInfo)
-
-    // return this.infoObservable$;
-
-
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
+  
 
   
-  randomize(): void {
+  setValues(): void {
     // Only Change 3 values
-    // this.graphicsService.getInfoByCountry(this.labels[0], '2022-06-01')
+    this.barChartData.labels = this.regions
     this.barChartData.datasets[0].data = [
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
-      Math.round(Math.random() * 100),
+      this.kantoPokemonList.length, 
+      this.johtoPokemonList.length, 
+      this.hoennPokemonList.length,
+      this.sinnohPokemonList.length,
+      this.unovaPokemonList.length,
+      this.kalosPokemonList.length,
+      this.alolaPokemonList.length,
+      this.galarPokemonList.length
     ];
+
+    this.barChartData.datasets[1].data = [
+      this.kantoLocationsList.length, 
+      this.johtoLocationsList.length, 
+      this.hoennLocationsList.length,
+      this.sinnohLocationsList.length,
+      this.unovaLocationsList.length,
+      this.kalosLocationsList.length,
+      this.alolaLocationsList.length,
+      this.galarLocationsList.length
+    ];    
     
     this.chart?.update();
   }
 
-  sortArray(x: ShortCountry, y: ShortCountry){
-    if (x.name < y.name) {return -1;}
-    if (x.name > y.name) {return 1;}
+  sortArray(x: string, y: string){
+    if (x < y) {return -1;}
+    if (x > y) {return 1;}
     return 0;
   }
+
 
 }

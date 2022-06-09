@@ -5,7 +5,6 @@
         <div>
             <div>
                 <div style="display: block">
-                    <button mat-raised-button color="primary" (click)="getConfirmedPerDayByCountry('Europe')">Europa</button>
                     <canvas 
                         baseChart
                         [data]="barChartData"
@@ -16,12 +15,12 @@
                     </canvas>
                 </div>
 
-                <button 
-                    class="btn btn-primary float-end"
-                    (click)="randomize()"
+                <!-- <button 
+                    mat-raised-button color="primary"
+                    (click)="setValues()"
                 >
                     Actualizar
-                </button>
+                </button> -->
                 
             </div>
         </div>

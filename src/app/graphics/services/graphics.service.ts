@@ -1,90 +1,88 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CountryData, DateInfo, Total, Dates } from '../interfaces/covid-data.interfaces';
 import { Observable, of, Subject } from 'rxjs';
+import { RegionData, RegionInfo, PokedexInfo, Result, RegionPokemon } from '../interfaces/pokemon.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphicsService {
 
-  private _baseUrl: string = 'https://api.covid19tracking.narrativa.com/api';
+  private _baseUrl: string = 'https://pokeapi.co/api/v2';
 
-  private _infoSubject$: Subject<Total[]> = new Subject();
-  public infoObservable$ = this._infoSubject$.asObservable();
+  private _regionsInfoSubject$: Subject<RegionInfo> = new Subject();
+  public regionInfoObservable$ = this._regionsInfoSubject$.asObservable();
 
-  setInfoSubject$ (info: Total[]) {
-    this._infoSubject$.next(info);
-  }
+  private _pokedexInfoSubject$: Subject<PokedexInfo> = new Subject();
+  public pokedexInfoObservable$ = this._pokedexInfoSubject$.asObservable();
 
-  date: string = "";
+  private _locationsSubject$: Subject<Result[]> = new Subject();
+  public locationsObservable$ = this._locationsSubject$.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  getCountriesInfo(countries: string[], date: string): Observable<Total[]> | Observable<[]> {
+  getRegions(): Observable<RegionData> {
 
-    if (!countries || !date) {
-      return of([])
-    }
-
-    const totalInfo: Total[] = []
-
-    this.setInfoSubject$(totalInfo)
-
-    return this.infoObservable$;
+    const url = `${this._baseUrl}/region`
+    return this.http.get<RegionData>(url);
   }
 
-  getInfoByCountry(country: string, date: string): Observable<CountryData[]> | Observable<[]> { //  Observable<CountryData[]> | Observable<[]> // Total[]
+  getRegionsInfo(regionInfoUrls: string[]): Observable<RegionInfo> {
+    
+    regionInfoUrls.map(url => {
+      this.http.get<RegionInfo>(url).subscribe(
+        data => {
+          this._regionsInfoSubject$.next(data);
+        }
+      )
+    })
 
-    if (!country || !date) {
-      return of([])
-    }
+    return this._regionsInfoSubject$
+  }
 
-    const url = `${this._baseUrl}/${date}/country/${country}`;
-    return this.http.get<CountryData[]>(url);
+  getLocations(regionInfoUrls: string[]): Observable<Result[]> {
 
-    // if (!country || !date) {
-    //   return []
-    // }
+    regionInfoUrls.map(url => {
+      this.http.get<RegionInfo>(url).subscribe(
+        data => {
+          const locationList: Result[] = []
+          const locations: Result[] = data.locations;
+          locations.map(location => {
+            locationList.push(location)
+          })
+          this._locationsSubject$.next(locationList)
+        }
+      )
+    })
 
-    // const url = `${this._baseUrl}/${date}/country/${country}`;
-
-    // const countryInfo: Total[] = [];
-
-    // let countryInfo!: number;
-
-    // this.http.get<CountryData>(url).subscribe(
-    //   data => {
-
-    //     const dates: Dates[] = Object.values(data)
-    //     // console.log(dates[0]);
-        
-    //     const dateInfo: DateInfo[] = Object.values(dates[0])
-    //     // console.log(dateInfo[0]);
-
-    //     const country: DateInfo = dateInfo[0]
-    //     // console.log(country.countries);
-        
-    //     const countryInfoList: Total[] = Object.values(country.countries)
-    //     console.log(countryInfoList[0]);
-
-    //     // const countryInfo = countryInfoList[0]
-        
-    //     // const todayConfirmed = countryInfo.today_confirmed;
-
-    //     countryInfo = countryInfoList[0].today_confirmed;
-
-    //     console.log(countryInfo);
-        
-
-    //     // return countryInfo
-        
-    //   }
-    // );
-
-    // console.log('countryInfo', countryInfo);
-
-    // return countryInfo
+    return this._locationsSubject$
 
   }
+
+  getPokedexInfo(pokedexUrl: string): Observable<PokedexInfo> {
+
+    this.http.get<PokedexInfo>(pokedexUrl).subscribe(
+      data => {
+        // const obj = {region: data.name, pokemon_list: ['']}
+        // const pokemonList = data.pokemon_entries;
+        // obj.pokemon_list.splice(1,1);
+        // pokemonList.map(pokemon => {
+        //   obj.pokemon_list.push(pokemon.pokemon_species.name)
+        // })
+        // obj.pokemon_list.sort(this.sortArray);
+        this._pokedexInfoSubject$.next(data);
+      }
+    )
+
+    return this._pokedexInfoSubject$
+
+  }
+
+  sortArray(x: string, y: string){
+    if (x < y) {return -1;}
+    if (x > y) {return 1;}
+    return 0;
+  }
+
+
 }
