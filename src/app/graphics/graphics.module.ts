@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { NgChartsModule } from 'ng2-charts';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { GraphicsRoutingModule } from './graphics-routing.module';
 import { GraphMainPageComponent } from './graph-main-page/graph-main-page.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
@@ -20,6 +21,7 @@ import { DialogChartPokemonComponent } from './dialog-chart-pokemon/dialog-chart
   ],
   imports: [
     CommonModule,
+    FlexLayoutModule,
     GraphicsRoutingModule,
     MaterialModule,
     NgChartsModule

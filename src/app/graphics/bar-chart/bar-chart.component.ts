@@ -56,7 +56,7 @@ export class BarChartComponent implements OnInit {
     datasets: [
       { 
         data: [ ], 
-        label: 'Número de pokemons por región', backgroundColor: '#FAC287', hoverBackgroundColor: '#FAE7BD', borderWidth: 1, borderColor: '#000000', hoverBorderColor: '#000000' 
+        label: 'Pokemons por región', backgroundColor: '#FAC287', hoverBackgroundColor: '#FAE7BD', borderWidth: 1, borderColor: '#000000', hoverBorderColor: '#000000' 
       },
       { 
         data: [ ], 
@@ -67,7 +67,8 @@ export class BarChartComponent implements OnInit {
 
   // events
   public chartClicked({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
-    this.openDialog()
+    console.log(event, active);
+    // this.openDialog()
   }
 
   public chartHovered({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
@@ -123,14 +124,8 @@ export class BarChartComponent implements OnInit {
     )
     .subscribe(
       pokedexInfo => {
-        // this.regions.map(region => {
-        //   if (pokemon.region === region) {
-        //     this.pokemonList.push(pokemon.pokemon_list[pokemon.pokemon_list.length - 1])
-        //   }
-            
-        // })
 
-        console.log(pokedexInfo);
+        // console.log(pokedexInfo);
 
         const pokemon: RegionPokemon = {region: '', pokemon_list: ['']}
         const pokemonList = pokedexInfo.pokemon_entries;
@@ -141,7 +136,7 @@ export class BarChartComponent implements OnInit {
         })
         pokemon.pokemon_list.sort(this.sortArray);
 
-        console.log(pokemon);
+        // console.log(pokemon);
       
         switch (pokemon.region) {
           case 'kanto':
@@ -172,42 +167,42 @@ export class BarChartComponent implements OnInit {
             break;
         }
 
-        if (pokemon.region === 'kanto') {
+        if (pokemon.region === 'kanto' && this.kantoPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemon => {
             this.kantoPokemonList.push(pokemon)
           })
         }
-        if (pokemon.region === 'original-johto') {
+        if (pokemon.region === 'original-johto' && this.johtoPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemon => {
             this.johtoPokemonList.push(pokemon)
           })
         }
-        if (pokemon.region === 'hoenn') {
+        if (pokemon.region === 'hoenn' && this.hoennPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.hoennPokemonList.push(pokemonName)
           })
         }
-        if (pokemon.region === 'original-sinnoh') {
+        if (pokemon.region === 'original-sinnoh' && this.sinnohPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.sinnohPokemonList.push(pokemonName)
           })
         }
-        if (pokemon.region === 'original-unova') {
+        if (pokemon.region === 'original-unova' && this.unovaPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.unovaPokemonList.push(pokemonName)
           })
         }
-        if (pokemon.region === 'kalos-central') {
+        if (pokemon.region === 'kalos-central' && this.kalosPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.kalosPokemonList.push(pokemonName)
           })
         }
-        if (pokemon.region === 'original-alola') {
+        if (pokemon.region === 'original-alola' && this.alolaPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.alolaPokemonList.push(pokemonName)
           })
         }
-        if (pokemon.region === 'galar') {
+        if (pokemon.region === 'galar' && this.galarPokemonList.length === 0) {
           pokemon.pokemon_list.map(pokemonName => {
             this.galarPokemonList.push(pokemonName)
           })
@@ -227,23 +222,17 @@ export class BarChartComponent implements OnInit {
 
       }
     )
-    
-    // console.log(this.regions);
-    // console.log(this.regionsInfoUrls);
-
-    
-
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogChartPokemonComponent, {
-      data: {region: this.regions[0]},
-    });
+  // openDialog() {
+  //   const dialogRef = this.dialog.open(DialogChartPokemonComponent, {
+  //     data: {region: this.regions[0]},
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log(`Dialog result: ${result}`);
+  //   });
+  // }
   
 
   
