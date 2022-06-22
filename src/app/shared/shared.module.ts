@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { AppRoutingModule } from '../app-routing.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AppRoutingModule } from '../app-routing.module';
 import { MaterialModule } from '../material/material.module';
 
-import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
-    MainPageComponent
+    SidebarComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +17,7 @@ import { MainPageComponent } from './main-page/main-page.component';
     MaterialModule
   ],
   exports: [
-    MainPageComponent
+    SidebarComponent
   ]
 })
-export class MainPageModule { }
+export class SharedModule { }

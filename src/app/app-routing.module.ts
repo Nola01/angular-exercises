@@ -5,12 +5,10 @@ import { CommunicationComponent } from './component-communication/communication/
 import { DisplayComponent } from './display-hide/display/display.component';
 import { LightsComponent } from './light-switch/lights/lights.component';
 import { CrudMainPageComponent } from './crud/crud-main-page/crud-main-page.component';
-import { MainPageComponent } from './main-page/main-page/main-page.component';
 import { GraphMainPageComponent } from './graphics/graph-main-page/graph-main-page.component';
 
 
 const routes: Routes = [
-  { path: 'main-page', component: MainPageComponent },
   { path: 'display-hide', component: DisplayComponent },
   { path: 'component-communication', component: CommunicationComponent },
   { path: 'crud', component: CrudMainPageComponent },

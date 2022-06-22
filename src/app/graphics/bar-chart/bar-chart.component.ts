@@ -9,7 +9,6 @@ import { GraphicsService } from '../services/graphics.service';
 import { ShortCountry } from '../interfaces/countries.interfaces';
 import { Result, RegionPokemon, MainGeneration } from '../interfaces/pokemon.interfaces';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogChartPokemonComponent } from '../dialog-chart-pokemon/dialog-chart-pokemon.component';
 
 
 @Component({

@@ -9,7 +9,6 @@ import { GraphMainPageComponent } from './graph-main-page/graph-main-page.compon
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { MaterialModule } from '../material/material.module';
-import { DialogChartPokemonComponent } from './dialog-chart-pokemon/dialog-chart-pokemon.component';
 
 
 @NgModule({
@@ -17,7 +16,6 @@ import { DialogChartPokemonComponent } from './dialog-chart-pokemon/dialog-chart
     GraphMainPageComponent,
     LineChartComponent,
     BarChartComponent,
-    DialogChartPokemonComponent
   ],
   imports: [
     CommonModule,
